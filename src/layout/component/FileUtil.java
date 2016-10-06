@@ -18,24 +18,6 @@ public class FileUtil {
 	public static HashMap<String, String> currentNameMaps = new HashMap<String,String>();
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-        String[] result = FileUtil.readFile("surname");
-        System.out.println(result.length);
-        ArrayList<ResultModel> rmA = new ArrayList<ResultModel>();
-        Random r = new Random();
-        PassGenerator pg = new PassGenerator(8);
-        PassGenerator pg_1 = new PassGenerator(7);
-        AccountGenerator ag = new AccountGenerator(1);
-        for(int i = 0 ; i  < 4; i ++){
-        	int p = r.nextInt(result.length);
-        	ResultModel rmd = new ResultModel();
-        	rmd.setUsername(result[p]);
-        	System.out.println(rmd.getUsername());
-        	rmd.setPassword(pg.nextString());
-        	rmd.setAccount(ag.nextString()+pg_1.nextString());
-        	rmA.add(rmd);
-        }
-        FileUtil.writeFile("result.csv", 2,null, rmA.toArray(new ResultModel[0]));
 	}
 	
 	public static void generateResult(String filepath, int type, JProgressBar bar, String[] surnames, String[] chinames, String[] accounts, int len, int num){

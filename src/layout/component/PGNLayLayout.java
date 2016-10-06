@@ -68,6 +68,11 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 		initialize();
 	}
 
+	/**
+	 * 檢查 properties是否有正確設定
+	 * 
+	 * @return boolean whether is correctly Set
+	 */
 	public static boolean propChecker(){
 		boolean isReady = true;
 		if(prop.getProperty(chineseNameFile)==null){
@@ -88,20 +93,31 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 		return isReady;
 	}
 	
+	/**
+	 * 檢查properties中的file是否存在
+	 * 
+	 * @return errMsg
+	 */
 	public static String fileChecker(){
-		StringBuilder fileReady = new StringBuilder("");
+		StringBuilder errMsg = new StringBuilder("");
 		if(!fileExists(prop.getProperty(chineseSurnameFile))){
-			return fileReady.append(prop.getProperty(chineseSurnameFile)+" 不存在").toString();
+			return errMsg.append(prop.getProperty(chineseSurnameFile)+" 不存在").toString();
 		}
 		if(!fileExists(prop.getProperty(chineseNameFile))){
-			return fileReady.append(prop.getProperty(chineseNameFile)+" 不存在").toString();
+			return errMsg.append(prop.getProperty(chineseNameFile)+" 不存在").toString();
 		}
 		if(!fileExists(prop.getProperty(englishNameFile))){
-			return fileReady.append(prop.getProperty(englishNameFile)+"不存在").toString();
+			return errMsg.append(prop.getProperty(englishNameFile)+"不存在").toString();
 		}
-		return fileReady.toString();
+		return errMsg.toString();
 	}
 	
+	/**
+	 * 確認file是否存在
+	 * 
+	 * @param filename
+	 * @return
+	 */
 	public static boolean fileExists(String filename){
 	   return new File(filename).exists();
 	}
@@ -126,7 +142,6 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 		
 		JCheckBox chckbxFacebookemail = new JCheckBox("Facebook(中文姓名+email+密碼)");
 		chckbxFacebookemail.setSelected(true);
-//		timer=new Timer(100,this);
 		
 		final JCheckBox[] chbox = {chckbxLine, chckbxWechat, chckbxFacebookemail};
 		final String[] outputFiles = {outputPath+"Line.csv",outputPath+"WebChat.csv",outputPath+"Facebook.csv"};
