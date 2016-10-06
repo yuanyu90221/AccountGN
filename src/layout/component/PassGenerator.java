@@ -2,6 +2,11 @@ package layout.component;
 
 import java.util.Random;
 
+/**
+ * @author YuanyuLiang
+ * 
+ * @description: generator for password
+ */
 public class PassGenerator {
 	private static final char[] symbols;
 

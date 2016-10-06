@@ -9,17 +9,17 @@ import java.awt.event.MouseEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Properties;
 
-import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
-import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SpinnerNumberModel;
@@ -78,7 +78,7 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 		if(prop.getProperty(englishNameFile)==null){
 			return false;
 		}
-		if(prop.getProperty(outputPath)==null){
+		if(prop.getProperty(outputFile)==null){
 			return false;
 		}
 		if(prop.getProperty(passwordLength)==null){
@@ -99,18 +99,19 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 		final JSpinner spinner = new JSpinner();
 		spinner.setModel(new SpinnerNumberModel(1, 1, 10000, 1));
 		
-		JRadioButton rdbtnLine = new JRadioButton("Line(中文姓名)");
+		JCheckBox chckbxLine = new JCheckBox("Line(中文姓名)");
+		chckbxLine.setSelected(true);
 		
-		JRadioButton rdbtnWechat = new JRadioButton("WeChat(中文姓名 + 密碼)");
+		JCheckBox chckbxWechat = new JCheckBox("WeChat(中文姓名+密碼)");
+		chckbxWechat.setSelected(true);
 		
-		JRadioButton rdbtnFacebook = new JRadioButton("Facebook(中文姓名+ email +密碼)");
+		JCheckBox chckbxFacebookemail = new JCheckBox("Facebook(中文姓名+email+密碼)");
+		chckbxFacebookemail.setSelected(true);
 //		timer=new Timer(100,this);
-		final JRadioButton[] rdbs = {rdbtnLine,rdbtnWechat,rdbtnFacebook};
-		 //Group the radio buttons.
-		  final ButtonGroup group = new ButtonGroup();
-		  group.add(rdbtnLine);
-		  group.add(rdbtnWechat);
-		  group.add(rdbtnFacebook);
+		
+		final JCheckBox[] chbox = {chckbxLine, chckbxWechat, chckbxFacebookemail};
+		final String[] outputFiles = {outputPath+"Line.csv",outputPath+"WebChat.csv",outputPath+"Facebook.csv"};
+		 
 		  progressBar = new JProgressBar();
 		 
 		  progressBar.setMinimum(0);
@@ -125,14 +126,15 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				Integer number = (Integer)spinner.getValue();
+				ArrayList<Integer> gnCh = new ArrayList<Integer>();
 				num = number.intValue();
-				int select = -1;
-				for(int i = 0 ; i < rdbs.length; i++){
-					if(rdbs[i].isSelected()){
-						select = i;
-						break;
+				
+				for(int i = 0 ; i < chbox.length; i++){
+					if(chbox[i].isSelected()){
+						gnCh.add(i);
 					}
 				}
+				System.out.println(gnCh.size());
 				//確認properties是否存在
 				if(propChecker()==false){
 					System.out.println("確認config.properties都有存在");
@@ -140,17 +142,19 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 					frame.dispose();
 					return;
 				}
-				if(select!=-1){
-					
+				if(gnCh.size() > 0){
+					StringBuilder outputList = new StringBuilder("已產生帳密文件:");
 					progressBar.setValue(0);
-					FileUtil.generateResult(outputPath+"Line.csv", 0, progressBar, surnameSeeds, chinameSeeds, accountSeeds, passwordlen, num);
-					FileUtil.generateResult(outputPath+"WebChat.csv", 1, progressBar, surnameSeeds, chinameSeeds, accountSeeds, passwordlen, num);
-					FileUtil.generateResult(outputPath+"Facebook.csv", 2, progressBar, surnameSeeds, chinameSeeds, accountSeeds, passwordlen, num);
-					button.setEnabled(false);
-					
+					button.setEnabled(false);	
+					for(int index = 0 ;  index < gnCh.size(); index++){
+						outputList.append(outputFiles[gnCh.get(index)]);
+						outputList.append(index==gnCh.size()-1?"":",");
+						FileUtil.generateResult(outputFiles[gnCh.get(index)], gnCh.get(index), progressBar, surnameSeeds, chinameSeeds, accountSeeds, passwordlen, num);
+					}
+						
 					button.setEnabled(true);
 					progressBar.setValue(100);
-					JOptionPane.showMessageDialog(null, "已產生帳密文件result.csv");
+					JOptionPane.showMessageDialog(null, outputList.toString());
 				}
 				else{
 					JOptionPane.showMessageDialog(null, "請至少選一個類別");
@@ -160,27 +164,25 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 		
 		
 		JLabel label_1 = new JLabel("進度");
+		
+		
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(5)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addComponent(label)
 						.addComponent(label_1))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(button)
-								.addComponent(rdbtnWechat)
-								.addComponent(rdbtnLine)
-								.addComponent(rdbtnFacebook)
-								.addComponent(spinner, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(12)
-							.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addGap(208))
+						.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(spinner, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
+						.addComponent(chckbxLine)
+						.addComponent(chckbxWechat)
+						.addComponent(chckbxFacebookemail)
+						.addComponent(button))
+					.addGap(214))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -191,20 +193,20 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 							.addComponent(label))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(2)
-							.addComponent(spinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(rdbtnLine)))
+							.addComponent(spinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(chckbxLine)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(chckbxWechat)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(rdbtnWechat)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(rdbtnFacebook)
+					.addComponent(chckbxFacebookemail)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(button)
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(label_1)
-						.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(107, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(progressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(label_1))
+					.addContainerGap(113, Short.MAX_VALUE))
 		);
 		frame.getContentPane().setLayout(groupLayout);	
 
