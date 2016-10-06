@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -14,6 +15,8 @@ public class FileUtil {
 	private static final String COMMA_DELEMITER = ",";
 	private static final String NEW_LINE_SEPARATOR = "\n";
 	private static final String FILE_HEADER = "username,password,account";
+	public static HashMap<String, String> currentNameMaps = new HashMap<String,String>();
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
         String[] result = FileUtil.readFile("surname");
@@ -35,24 +38,38 @@ public class FileUtil {
         FileUtil.writeFile("result.csv", 2,null, rmA.toArray(new ResultModel[0]));
 	}
 	
-	public static int generateResult(String filepath, int type, JProgressBar bar, String[] current, int len, int num){
+	public static void generateResult(String filepath, int type, JProgressBar bar, String[] surnames, String[] chinames, String[] accounts, int len, int num){
+		//currentNameMaps.clear();
 		ArrayList<ResultModel> rmA = new ArrayList<ResultModel>();
         Random r = new Random();
         PassGenerator pg = new PassGenerator(len);
-        PassGenerator pg_1 = new PassGenerator(len-1);
-        AccountGenerator ag = new AccountGenerator(1);
+
+        AccountGenerator ag = new AccountGenerator(4);
+        int surnameRandom = 0;
+        int chinameRandom = 0;
+        StringBuilder userNameSb;
         for(int i = 0 ; i  <num; i ++){
-        	int p = r.nextInt(current.length);
+        	int accountRandom = r.nextInt(accounts.length);
+        	do{
+        		userNameSb = new StringBuilder();
+	        	surnameRandom = r.nextInt(surnames.length);
+	        	chinameRandom = r.nextInt(chinames.length);
+	        	userNameSb.append(surnames[surnameRandom]);
+	        	userNameSb.append(chinames[chinameRandom]);
+	        	
+        	} while(currentNameMaps.containsKey(userNameSb.toString()));
+        	currentNameMaps.put(userNameSb.toString(),userNameSb.toString());
         	ResultModel rmd = new ResultModel();
-        	rmd.setUsername(current[p]);
+        	rmd.setUsername(userNameSb.toString());
         	System.out.println(rmd.getUsername());
         	rmd.setPassword(pg.nextString());
-        	rmd.setAccount(ag.nextString()+pg_1.nextString());
+        	rmd.setAccount(accounts[accountRandom]+ag.nextString());
         	rmA.add(rmd);
         }
-        return writeFile(filepath, type, bar, rmA.toArray(new ResultModel[0]));
+        currentNameMaps.clear();
+        writeFile(filepath, type, bar, rmA.toArray(new ResultModel[0]));
 	}
-	public static int writeFile(String filepath, int type,JProgressBar bar, ResultModel... rmdArr){
+	public static void writeFile(String filepath, int type,JProgressBar bar, ResultModel... rmdArr){
 		FileWriter fw = null;
 		int result = 0;
 		try {
@@ -65,8 +82,10 @@ public class FileUtil {
 				writeLine(fw, type,rmdArr[index]);
 				fw.append(NEW_LINE_SEPARATOR);
 				if(bar !=null){
+					 int curr= bar.getValue();
 					bar.setValue(index);
 					System.out.println("test"+index);
+					System.out.println(curr);
 				}
 				result = index;
 			}
@@ -84,16 +103,29 @@ public class FileUtil {
 					e.printStackTrace();
 				}
 			}
-		  return result;
+		 
 		}
 	}
     
 	public static void writeLine(FileWriter fw,int type, ResultModel rmd) throws IOException{
+		   switch(type){
+		   case 0:
+		    	fw.append(rmd.getUsername());
+				fw.append(COMMA_DELEMITER);
+				break;
+		   case 1:
+		    	fw.append(rmd.getUsername());
+				fw.append(COMMA_DELEMITER);
+				fw.append(rmd.getPassword());
+				break;	
+		   case 2:
 		    	fw.append(rmd.getUsername());
 				fw.append(COMMA_DELEMITER);
 				fw.append(rmd.getPassword());
 				fw.append(COMMA_DELEMITER);
-				fw.append(rmd.getAccount());			
+				fw.append(rmd.getAccount());
+				break;
+		   }
 	}
 	
 	public static String[] readFile(String filepath){

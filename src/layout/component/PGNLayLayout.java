@@ -10,7 +10,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.Random;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -24,7 +23,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -33,11 +31,14 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 	public static final String chineseSurnameFile = "chineseSurnameFile";
 	public static final String outputFile = "outputFile";
 	public static final String passwordLength = "passwordLength";
+	public static final String englishNameFile = "englisheNameFile";
+	public static final String chineseNameFile = "chineseNameFile";
 	private JFrame frame;
-	private Timer timer;
 	private JButton button;
 	private JProgressBar progressBar;
 	public static String[] surnameSeeds = null;
+	public static String[] accountSeeds = null;
+	public static String[] chinameSeeds = null;
 	public static String outputPath = "" ;
 	public static int passwordlen = 0;
 	public static int num = 0;
@@ -66,6 +67,25 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 		initialize();
 	}
 
+	public static boolean propChecker(){
+		boolean isReady = true;
+		if(prop.getProperty(chineseNameFile)==null){
+			return false;
+		}
+		if(prop.getProperty(chineseSurnameFile)==null){
+			return false;
+		}
+		if(prop.getProperty(englishNameFile)==null){
+			return false;
+		}
+		if(prop.getProperty(outputPath)==null){
+			return false;
+		}
+		if(prop.getProperty(passwordLength)==null){
+			return false;
+		}
+		return isReady;
+	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -77,14 +97,14 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 		JLabel label = new JLabel("數量");
 		
 		final JSpinner spinner = new JSpinner();
-		spinner.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+		spinner.setModel(new SpinnerNumberModel(1, 1, 10000, 1));
 		
 		JRadioButton rdbtnLine = new JRadioButton("Line(中文姓名)");
 		
 		JRadioButton rdbtnWechat = new JRadioButton("WeChat(中文姓名 + 密碼)");
 		
 		JRadioButton rdbtnFacebook = new JRadioButton("Facebook(中文姓名+ email +密碼)");
-		timer=new Timer(100,this);
+//		timer=new Timer(100,this);
 		final JRadioButton[] rdbs = {rdbtnLine,rdbtnWechat,rdbtnFacebook};
 		 //Group the radio buttons.
 		  final ButtonGroup group = new ButtonGroup();
@@ -94,7 +114,7 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 		  progressBar = new JProgressBar();
 		 
 		  progressBar.setMinimum(0);
-		  progressBar.setMaximum(surnameSeeds.length);
+		  progressBar.setMaximum(100);
 		  progressBar.setValue(0);
 		  progressBar.setStringPainted(true);
 		  progressBar.setBorderPainted(true);
@@ -113,14 +133,23 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 						break;
 					}
 				}
-				
+				//確認properties是否存在
+				if(propChecker()==false){
+					System.out.println("確認config.properties都有存在");
+					JOptionPane.showMessageDialog(null, "確認config.properties都有存在");
+					frame.dispose();
+					return;
+				}
 				if(select!=-1){
+					
 					progressBar.setValue(0);
-					res_num = FileUtil.generateResult(outputPath,0,progressBar,surnameSeeds , passwordlen, num);
-					timer.start();
+					FileUtil.generateResult(outputPath+"Line.csv", 0, progressBar, surnameSeeds, chinameSeeds, accountSeeds, passwordlen, num);
+					FileUtil.generateResult(outputPath+"WebChat.csv", 1, progressBar, surnameSeeds, chinameSeeds, accountSeeds, passwordlen, num);
+					FileUtil.generateResult(outputPath+"Facebook.csv", 2, progressBar, surnameSeeds, chinameSeeds, accountSeeds, passwordlen, num);
 					button.setEnabled(false);
-					timer.stop();
+					
 					button.setEnabled(true);
+					progressBar.setValue(100);
 					JOptionPane.showMessageDialog(null, "已產生帳密文件result.csv");
 				}
 				else{
@@ -188,24 +217,24 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource()==button){
-			timer.start();
-		}
-		if(e.getSource()==timer){
-			int value= progressBar.getValue();
-			if(res_num < num){
-			    progressBar.setValue(++value);
-//				System.out.println("num : "+num);
-//				
-//				System.out.println("value : "+num);
-			   // value= progressBar.getValue();
-			  //  System.out.println("value : "+num);
-			}else{
-				timer.stop();
-				button.setEnabled(true);
-				JOptionPane.showMessageDialog(null, "已產生帳密文件result.csv");
-			}
-		}
+//		if(e.getSource()==button){
+//			timer.start();
+//		}
+//		if(e.getSource()==timer){
+//			int value= progressBar.getValue();
+//			if(res_num < num){
+//			    progressBar.setValue(++value);
+////				System.out.println("num : "+num);
+////				
+////				System.out.println("value : "+num);
+//			   // value= progressBar.getValue();
+//			  //  System.out.println("value : "+num);
+//			}else{
+//				timer.stop();
+//				button.setEnabled(true);
+//				JOptionPane.showMessageDialog(null, "已產生帳密文件result.csv");
+//			}
+//		}
 	}
 	
 	public static void loadProperties(){
@@ -213,17 +242,16 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 	    try {
 			input = new FileInputStream("config.properties");
 			prop.load(input);
-			System.out.println("readdir:"+ prop.getProperty(chineseSurnameFile));
+			System.out.println("readSurnameFile:"+ prop.getProperty(chineseSurnameFile));
 			System.out.println("output:" + prop.getProperty(outputFile));
 			System.out.println("passwordLength: " + prop.getProperty(passwordLength ));
+			System.out.println("englishNameFile: " + prop.getProperty(englishNameFile));
+		    System.out.println("chineseNameFile: " + prop.getProperty(chineseNameFile));
 			passwordlen =  Integer.parseInt(prop.getProperty(passwordLength));
 			outputPath = prop.getProperty(outputFile);
 			surnameSeeds = FileUtil.readFile(prop.getProperty(chineseSurnameFile));
-//			Random r = new Random();
-//			for(int i = 0; i < 2;i++){
-//				int j  = r.nextInt(surnameSeeds.length);
-//				System.out.println(surnameSeeds[j]);
-//			}
+			accountSeeds = FileUtil.readFile(prop.getProperty(englishNameFile));
+			chinameSeeds = FileUtil.readFile(prop.getProperty(chineseNameFile));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
