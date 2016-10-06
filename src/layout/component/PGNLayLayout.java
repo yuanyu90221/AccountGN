@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -86,6 +87,24 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 		}
 		return isReady;
 	}
+	
+	public static String fileChecker(){
+		StringBuilder fileReady = new StringBuilder("");
+		if(!fileExists(prop.getProperty(chineseSurnameFile))){
+			return fileReady.append(prop.getProperty(chineseSurnameFile)+" 不存在").toString();
+		}
+		if(!fileExists(prop.getProperty(chineseNameFile))){
+			return fileReady.append(prop.getProperty(chineseNameFile)+" 不存在").toString();
+		}
+		if(!fileExists(prop.getProperty(englishNameFile))){
+			return fileReady.append(prop.getProperty(englishNameFile)+"不存在").toString();
+		}
+		return fileReady.toString();
+	}
+	
+	public static boolean fileExists(String filename){
+	   return new File(filename).exists();
+	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -142,6 +161,13 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 					frame.dispose();
 					return;
 				}
+				//確認檔案是否都存在
+			    if(!fileChecker().equals("")){
+			    	System.out.println(fileChecker());
+					JOptionPane.showMessageDialog(null, fileChecker());
+					frame.dispose();
+					return;
+			    }
 				if(gnCh.size() > 0){
 					StringBuilder outputList = new StringBuilder("已產生帳密文件:");
 					progressBar.setValue(0);
@@ -219,24 +245,7 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-//		if(e.getSource()==button){
-//			timer.start();
-//		}
-//		if(e.getSource()==timer){
-//			int value= progressBar.getValue();
-//			if(res_num < num){
-//			    progressBar.setValue(++value);
-////				System.out.println("num : "+num);
-////				
-////				System.out.println("value : "+num);
-//			   // value= progressBar.getValue();
-//			  //  System.out.println("value : "+num);
-//			}else{
-//				timer.stop();
-//				button.setEnabled(true);
-//				JOptionPane.showMessageDialog(null, "已產生帳密文件result.csv");
-//			}
-//		}
+
 	}
 	
 	public static void loadProperties(){
