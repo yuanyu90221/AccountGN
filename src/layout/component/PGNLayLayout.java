@@ -111,6 +111,7 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 		}
 		return errMsg.toString();
 	}
+	private static ArrayList<PGenerator> pa = null;
 	
 	/**
 	 * 確認file是否存在
@@ -128,9 +129,8 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		JLabel label = new JLabel("數量");
-		
+		pa = new ArrayList<PGenerator>();
 		final JSpinner spinner = new JSpinner();
 		spinner.setModel(new SpinnerNumberModel(1, 1, 10000, 1));
 		
@@ -187,12 +187,17 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 					StringBuilder outputList = new StringBuilder("已產生帳密文件:");
 					progressBar.setValue(0);
 					button.setEnabled(false);	
+					pa.clear();
 					for(int index = 0 ;  index < gnCh.size(); index++){
 						outputList.append(outputFiles[gnCh.get(index)]);
 						outputList.append(index==gnCh.size()-1?"":",");
-						FileUtil.generateResult(outputFiles[gnCh.get(index)], gnCh.get(index), progressBar, surnameSeeds, chinameSeeds, accountSeeds, passwordlen, num);
-					}
+						pa.add(new PGenerator(outputFiles[gnCh.get(index)], gnCh.get(index),num));
 						
+					}
+					for(PGenerator pg : pa){
+						Thread th = new Thread(pg);
+						th.start();
+					}
 					button.setEnabled(true);
 					progressBar.setValue(100);
 					JOptionPane.showMessageDialog(null, outputList.toString());
