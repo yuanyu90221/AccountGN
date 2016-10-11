@@ -20,7 +20,7 @@ public class FileUtil {
 	public static void main(String[] args) {
 	}
 	
-	public static void generateResult(String filepath, int type, JProgressBar bar, String[] surnames, String[] chinames, String[] accounts, int len, int num){
+	public static void generateResult(String filepath, int type, String[] surnames, String[] chinames, String[] accounts, int len, int num){
 		//currentNameMaps.clear();
 		ArrayList<ResultModel> rmA = new ArrayList<ResultModel>();
         Random r = new Random();
@@ -49,11 +49,10 @@ public class FileUtil {
         	rmA.add(rmd);
         }
         currentNameMaps.clear();
-        writeFile(filepath, type, bar, rmA.toArray(new ResultModel[0]));
+        writeFile(filepath, type, rmA.toArray(new ResultModel[0]));
 	}
-	public static void writeFile(String filepath, int type,JProgressBar bar, ResultModel... rmdArr){
+	public static void writeFile(String filepath, int type, ResultModel... rmdArr){
 		FileWriter fw = null;
-		int result = 0;
 		try {
 			fw = new FileWriter(filepath);
 			// UTF-8 BOM
@@ -62,14 +61,7 @@ public class FileUtil {
 			fw.append(NEW_LINE_SEPARATOR);
 			for(int index = 0 ;  index < rmdArr.length; index++){
 				writeLine(fw, type,rmdArr[index]);
-				fw.append(NEW_LINE_SEPARATOR);
-				if(bar !=null){
-					 int curr= bar.getValue();
-					bar.setValue(index);
-					System.out.println("test"+index);
-					System.out.println(curr);
-				}
-				result = index;
+				fw.append(NEW_LINE_SEPARATOR);				
 			}
 			
 		} catch (IOException e) {

@@ -31,7 +31,7 @@ public class PGenerator implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		
-        FileUtil.generateResult(outputPath+filepath, type, null, surnames, chinames, accounts, passwordlen, num);
+        FileUtil.generateResult(outputPath+filepath, type, surnames, chinames, accounts, passwordlen, num);
 	}
 
 	/**
