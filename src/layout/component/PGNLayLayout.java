@@ -145,7 +145,7 @@ public class PGNLayLayout {
 		chckbxFacebookemail.setSelected(true);
 		
 		final JCheckBox[] chbox = {chckbxLine, chckbxWechat, chckbxFacebookemail};
-		final String[] outputFiles = {outputPath+"Line.csv",outputPath+"WebChat.csv",outputPath+"Facebook.csv"};
+		final String[] outputFiles = {"GUILine.csv","GUIWebChat.csv","GUIFacebook.csv"};
 		 
 		  progressBar = new JProgressBar();
 		 
