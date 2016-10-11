@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * @author YuanyuLiang
+ *
+ * @description 使用thread去產生帳號
+ */
 public class PGenerator implements Runnable {
 	
 	static Properties prop = new Properties();

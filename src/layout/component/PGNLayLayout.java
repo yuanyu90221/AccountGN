@@ -2,8 +2,6 @@ package layout.component;
 
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -24,10 +22,13 @@ import javax.swing.JProgressBar;
 import javax.swing.JSpinner;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
-public class PGNLayLayout implements ActionListener,ChangeListener {
+/**
+ * @author YuanyuLiang
+ *
+ * @description 產生帳密的vo
+ */
+public class PGNLayLayout {
 	static Properties prop = new Properties();
 	public static final String chineseSurnameFile = "chineseSurnameFile";
 	public static final String outputFile = "outputFile";
@@ -258,16 +259,11 @@ public class PGNLayLayout implements ActionListener,ChangeListener {
 
 	}
 
-	@Override
-	public void stateChanged(ChangeEvent e) {
-
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-	}
 	
+	
+	/**
+	 * 初始化讀取config.properties內部的properties
+	 */
 	public static void loadProperties(){
 	    InputStream input = null;
 	    try {

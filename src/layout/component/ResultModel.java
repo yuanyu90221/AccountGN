@@ -1,5 +1,10 @@
 package layout.component;
 
+/**
+ * @author YuanyuLiang
+ *
+ * @description 儲存帳密的vo
+ */
 public class ResultModel {
 	
 	

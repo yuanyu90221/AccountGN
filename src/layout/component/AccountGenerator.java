@@ -2,6 +2,11 @@ package layout.component;
 
 import java.util.Random;
 
+/**
+ * @author YuanyuLiang
+ *
+ * @description 產生帳號數字
+ */
 public class AccountGenerator {
 	private static final char[] symbols;
 
@@ -22,7 +27,12 @@ public class AccountGenerator {
 	    buf = new char[length];
 	  }
 
-	  public String nextString() {
+	 /**
+	  * 產生下一個亂數string
+	  *  
+	  * @return
+	  */
+	public String nextString() {
 	    for (int idx = 0; idx < buf.length; ++idx) 
 	      buf[idx] = symbols[random.nextInt(symbols.length)];
 	    return new String(buf);

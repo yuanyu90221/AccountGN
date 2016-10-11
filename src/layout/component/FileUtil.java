@@ -9,19 +9,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import javax.swing.JProgressBar;
-
+/**
+ * @author YuanyuLiang
+ *
+ * @description output Account to file的物件
+ */
 public class FileUtil {
 	private static final String COMMA_DELEMITER = ",";
 	private static final String NEW_LINE_SEPARATOR = "\n";
 	private static final String FILE_HEADER = "username,password,account";
 	public static HashMap<String, String> currentNameMaps = new HashMap<String,String>();
 	
-	public static void main(String[] args) {
-	}
-	
+	/**
+	 * 產生帳號
+	 * 
+	 * @param filepath outputfileName
+	 * @param type     {0:Line, 1:Wechat,2: Facebook}
+	 * @param surnames  中文姓氏 array
+	 * @param chinames  中文名 array
+	 * @param accounts  英文名 array
+	 * @param len       密碼長度
+	 * @param num       產生帳號數量
+	 */
 	public static void generateResult(String filepath, int type, String[] surnames, String[] chinames, String[] accounts, int len, int num){
-		//currentNameMaps.clear();
+		// 儲存結果的vo
 		ArrayList<ResultModel> rmA = new ArrayList<ResultModel>();
         Random r = new Random();
         PassGenerator pg = new PassGenerator(len);
@@ -51,6 +62,13 @@ public class FileUtil {
         currentNameMaps.clear();
         writeFile(filepath, type, rmA.toArray(new ResultModel[0]));
 	}
+	/**
+	 * 寫出檔案
+	 * 
+	 * @param filepath output檔案名稱
+	 * @param type {0:Line, 1:Wechat,2: Facebook}
+	 * @param rmdArr 寫入的vo Array
+	 */
 	public static void writeFile(String filepath, int type, ResultModel... rmdArr){
 		FileWriter fw = null;
 		try {
@@ -81,6 +99,14 @@ public class FileUtil {
 		}
 	}
     
+	/**
+	 * 寫入行
+	 * 
+	 * @param fw 寫出filewriter
+	 * @param type {0:Line, 1:Wechat,2: Facebook}
+	 * @param rmd 傳入的vo
+	 * @throws IOException
+	 */
 	public static void writeLine(FileWriter fw,int type, ResultModel rmd) throws IOException{
 		   switch(type){
 		   case 0:
@@ -102,6 +128,12 @@ public class FileUtil {
 		   }
 	}
 	
+	/**
+	 * 讀檔案成為array
+	 * 
+	 * @param filepath 讀入檔案名稱
+	 * @return 結果array
+	 */
 	public static String[] readFile(String filepath){
 		String[] array = {};
 		FileReader fd = null;
