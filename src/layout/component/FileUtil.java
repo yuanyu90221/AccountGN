@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -18,7 +17,7 @@ public class FileUtil {
 	private static final String COMMA_DELEMITER = ",";
 	private static final String NEW_LINE_SEPARATOR = "\n";
 	private static final String FILE_HEADER = "username,password,account";
-	public static HashMap<String, String> currentNameMaps = new HashMap<String,String>();
+	public static KeyMaps[] currentNameMap = {new KeyMaps(), new KeyMaps(), new KeyMaps()};
 	
 	/**
 	 * 產生帳號
@@ -50,8 +49,8 @@ public class FileUtil {
 	        	userNameSb.append(surnames[surnameRandom]);
 	        	userNameSb.append(chinames[chinameRandom]);
 	        	
-        	} while(currentNameMaps.containsKey(userNameSb.toString()));
-        	currentNameMaps.put(userNameSb.toString(),userNameSb.toString());
+        	} while(currentNameMap[type].containsKey(userNameSb.toString()));
+        	currentNameMap[type].put(userNameSb.toString(),userNameSb.toString());
         	ResultModel rmd = new ResultModel();
         	rmd.setUsername(userNameSb.toString());
         	System.out.println(rmd.getUsername());
@@ -59,7 +58,7 @@ public class FileUtil {
         	rmd.setAccount(accounts[accountRandom]+ag.nextString());
         	rmA.add(rmd);
         }
-        currentNameMaps.clear();
+        currentNameMap[type].clear();
         writeFile(filepath, type, rmA.toArray(new ResultModel[0]));
 	}
 	/**

@@ -26,7 +26,7 @@ import javax.swing.SpinnerNumberModel;
 /**
  * @author YuanyuLiang
  *
- * @description 產生帳密的vo
+ * @description 產生帳密
  */
 public class PGNLayLayout {
 	static Properties prop = new Properties();
