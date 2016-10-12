@@ -87,6 +87,7 @@
 			<manifest>
 				<attribute name="Main-Class" value="layout.component.PGNLayLayout"/> 
 			</manifest>
+			
 		</jar>
 	</target>
 	<target name="pagDeamon" depends="compile" description="generate the distribution">
@@ -98,6 +99,7 @@
 			<manifest>
 				<attribute name="Main-Class" value="layout.component.PGenerator"/> 
 			</manifest>
+	    	<exclude name="**/PGNLayLayout*.class"/>
 	    </jar>
 	</target> 
 	<target name="pag" depends="compile" description="generate the distribution">
@@ -109,6 +111,7 @@
 			<manifest>
 				<attribute name="Main-Class" value="layout.component.PGNLayLayout"/> 
 			</manifest>
+			
 		</jar>
 	</target>
 </project>
