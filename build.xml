@@ -9,6 +9,7 @@
         <pathelement location="bin"/>
         <pathelement location="jgoodies-forms-1.8.0.jar"/>
         <pathelement location="miglayout15-swing.jar"/>
+    	<pathelement location="log4j-1.2.17.jar"/>
     </path>
     <target name="init" depends="clean">
     	<tstamp></tstamp>
@@ -75,7 +76,8 @@
         </java>
     </target>
   	<target name="compile" depends="init">
-		<javac srcdir="src" destdir="bin"/>
+  		
+		<javac srcdir="src" destdir="bin" classpathref="AccountGenerator.classpath"/>
 	</target>
     
 	<target name="dist" depends="compile" description="generate the distribution">
@@ -84,6 +86,7 @@
 		
 		<!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
 		<jar jarfile="dist/pag-${DSTAMP}.jar" basedir="bin">
+			<zipgroupfileset dir="." includes="log4j-1.2.17.jar" />
 			<manifest>
 				<attribute name="Main-Class" value="layout.component.PGNLayLayout"/> 
 			</manifest>
@@ -96,6 +99,7 @@
 	
 	    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
 	    <jar jarfile="dist/pagDeamon-${DSTAMP}.jar" basedir="bin">
+	    	<zipgroupfileset dir="." includes="log4j-1.2.17.jar" />
 			<manifest>
 				<attribute name="Main-Class" value="layout.component.PGenerator"/> 
 			</manifest>
@@ -108,10 +112,12 @@
 		
 		<!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
 		<jar jarfile="dist/pag-${DSTAMP}.jar" basedir="bin">
+			<zipgroupfileset dir="." includes="log4j-1.2.17.jar" />
 			<manifest>
 				<attribute name="Main-Class" value="layout.component.PGNLayLayout"/> 
 			</manifest>
 			
 		</jar>
+		
 	</target>
 </project>

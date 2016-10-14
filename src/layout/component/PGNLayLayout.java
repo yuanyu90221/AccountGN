@@ -23,6 +23,8 @@ import javax.swing.JSpinner;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SpinnerNumberModel;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author YuanyuLiang
  *
@@ -45,6 +47,7 @@ public class PGNLayLayout {
 	public static int passwordlen = 0;
 	public static int num = 0;
 	public static int res_num = 0;
+	private static Logger logger = Logger.getLogger(PGNLayLayout.class);
 	/**
 	 * Launch the application.
 	 */
@@ -55,7 +58,7 @@ public class PGNLayLayout {
 					PGNLayLayout window = new PGNLayLayout();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error(e.getMessage());
 				}
 			}
 		});
@@ -169,17 +172,17 @@ public class PGNLayLayout {
 						gnCh.add(i);
 					}
 				}
-				System.out.println(gnCh.size());
+				logger.info(gnCh.size());
 				//確認properties是否存在
 				if(propChecker()==false){
-					System.out.println("確認config.properties都有存在");
+					logger.info("確認config.properties都有存在");
 					JOptionPane.showMessageDialog(null, "確認config.properties都有存在");
 					frame.dispose();
 					return;
 				}
 				//確認檔案是否都存在
 			    if(!fileChecker().equals("")){
-			    	System.out.println(fileChecker());
+			    	logger.info(fileChecker());
 					JOptionPane.showMessageDialog(null, fileChecker());
 					frame.dispose();
 					return;
@@ -269,28 +272,27 @@ public class PGNLayLayout {
 	    try {
 			input = new FileInputStream("config.properties");
 			prop.load(input);
-			System.out.println("readSurnameFile:"+ prop.getProperty(chineseSurnameFile));
-			System.out.println("output:" + prop.getProperty(outputFile));
-			System.out.println("passwordLength: " + prop.getProperty(passwordLength ));
-			System.out.println("englishNameFile: " + prop.getProperty(englishNameFile));
-		    System.out.println("chineseNameFile: " + prop.getProperty(chineseNameFile));
+			logger.info("readSurnameFile:"+ prop.getProperty(chineseSurnameFile));
+			logger.info("output:" + prop.getProperty(outputFile));
+			logger.info("passwordLength: " + prop.getProperty(passwordLength ));
+			logger.info("englishNameFile: " + prop.getProperty(englishNameFile));
+		    logger.info("chineseNameFile: " + prop.getProperty(chineseNameFile));
 			passwordlen =  Integer.parseInt(prop.getProperty(passwordLength));
 			outputPath = prop.getProperty(outputFile);
 			surnameSeeds = FileUtil.readFile(prop.getProperty(chineseSurnameFile));
 			accountSeeds = FileUtil.readFile(prop.getProperty(englishNameFile));
 			chinameSeeds = FileUtil.readFile(prop.getProperty(chineseNameFile));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally{
 			if(input != null){
 				try {
 					input.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error(e.getMessage());
 				}
 			}
+			logger.info("properties loaded!");
 		}
 	}
 }

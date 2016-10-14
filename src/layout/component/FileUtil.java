@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+import org.apache.log4j.Logger;
 /**
  * @author YuanyuLiang
  *
@@ -18,7 +18,7 @@ public class FileUtil {
 	private static final String NEW_LINE_SEPARATOR = "\n";
 	private static final String FILE_HEADER = "username,password,account";
 	public static KeyMaps[] currentNameMap = {new KeyMaps(), new KeyMaps(), new KeyMaps()};
-	
+	private static Logger logger = Logger.getLogger(FileUtil.class);
 	/**
 	 * 產生帳號
 	 * 
@@ -53,7 +53,7 @@ public class FileUtil {
         	currentNameMap[type].put(userNameSb.toString(),userNameSb.toString());
         	ResultModel rmd = new ResultModel();
         	rmd.setUsername(userNameSb.toString());
-        	System.out.println(rmd.getUsername());
+        	logger.info(rmd.getUsername());
         	rmd.setPassword(pg.nextString());
         	rmd.setAccount(accounts[accountRandom]+ag.nextString());
         	rmA.add(rmd);
@@ -82,8 +82,7 @@ public class FileUtil {
 			}
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally{
 			if(fw != null){
 				try {
@@ -91,10 +90,10 @@ public class FileUtil {
 					fw.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error(e.getMessage());
 				}
 			}
-		 
+			logger.info("write File Finished");
 		}
 	}
     
@@ -148,25 +147,23 @@ public class FileUtil {
 			bd.close();
 			array = lines.toArray(new String[0]);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally{
 			if(fd!=null){
 				try {
 					fd.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error(e.getMessage());
 				}
 			}
 			if(bd!=null){
 				try {
 					bd.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error(e.getMessage());
 				}
 			}
+			logger.info("read file into array");
 		}
 		return array;
 	}

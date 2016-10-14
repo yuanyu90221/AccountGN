@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author YuanyuLiang
  *
@@ -31,6 +33,7 @@ public class PGenerator implements Runnable {
     private static String[] accounts;
     
     private static int accountNumber = 0;
+    private static Logger logger = Logger.getLogger(PGenerator.class);
 	
     @Override
 	public void run() {
@@ -109,12 +112,12 @@ public class PGenerator implements Runnable {
 	    try {
 			input = new FileInputStream("config.properties");
 			prop.load(input);
-			System.out.println("readSurnameFile:"+ prop.getProperty(chineseSurnameFile));
-			System.out.println("output:" + prop.getProperty(outputFile));
-			System.out.println("passwordLength: " + prop.getProperty(passwordLength ));
-			System.out.println("englishNameFile: " + prop.getProperty(englishNameFile));
-		    System.out.println("chineseNameFile: " + prop.getProperty(chineseNameFile));
-		    System.out.println("accountNum: " + prop.getProperty(accountNum));
+			logger.info("readSurnameFile:"+ prop.getProperty(chineseSurnameFile));
+			logger.info("output:" + prop.getProperty(outputFile));
+			logger.info("passwordLength: " + prop.getProperty(passwordLength ));
+			logger.info("englishNameFile: " + prop.getProperty(englishNameFile));
+		    logger.info("chineseNameFile: " + prop.getProperty(chineseNameFile));
+		    logger.info("accountNum: " + prop.getProperty(accountNum));
 			passwordlen =  Integer.parseInt(prop.getProperty(passwordLength));
 			accountNumber = Integer.parseInt(prop.getProperty(accountNum));
 			outputPath = prop.getProperty(outputFile);
@@ -122,17 +125,16 @@ public class PGenerator implements Runnable {
 			accounts = FileUtil.readFile(prop.getProperty(englishNameFile));
 			chinames = FileUtil.readFile(prop.getProperty(chineseNameFile));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally{
 			if(input != null){
 				try {
 					input.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.error(e.getMessage());
 				}
 			}
+			logger.info("properties loaded!!");
 		}
 	}
 
