@@ -270,7 +270,7 @@ public class PGNLayLayout {
 	public static void loadProperties(){
 	    InputStream input = null;
 	    try {
-			input = new FileInputStream("config.properties");
+			input = new FileInputStream("./config/config.properties");
 			prop.load(input);
 			logger.info("readSurnameFile:"+ prop.getProperty(chineseSurnameFile));
 			logger.info("output:" + prop.getProperty(outputFile));
