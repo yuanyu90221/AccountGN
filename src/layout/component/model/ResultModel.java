@@ -1,4 +1,4 @@
-package layout.component;
+package layout.component.model;
 
 /**
  * @author YuanyuLiang

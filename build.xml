@@ -51,27 +51,23 @@
         <antcall target="build"/>
     </target>
     <target name="FileUtil">
-        <java classname="layout.component.FileUtil" failonerror="true" fork="yes">
+        <java classname="layout.component.fileio.FileUtil" failonerror="true" fork="yes">
             <classpath refid="AccountGenerator.classpath"/>
         </java>
     </target>
     <target name="New_configuration">
-        <java classname="layout.component.PGenerator" failonerror="true" fork="yes">
+        <java classname="layout.component.thread.PGenerator" failonerror="true" fork="yes">
             <classpath refid="AccountGenerator.classpath"/>
         </java>
     </target>
-    <target name="PassWordGNLayout">
-        <java classname="layout.component.PassWordGNLayout" failonerror="true" fork="yes">
-            <classpath refid="AccountGenerator.classpath"/>
-        </java>
-    </target>
+   
     <target name="PGenerator">
-        <java classname="layout.component.PGenerator" failonerror="true" fork="yes">
+        <java classname="layout.component.thread.PGenerator" failonerror="true" fork="yes">
             <classpath refid="AccountGenerator.classpath"/>
         </java>
     </target>
     <target name="PGNLayLayout">
-        <java classname="layout.component.PGNLayLayout" failonerror="true" fork="yes">
+        <java classname="layout.component.gui.PGNLayLayout" failonerror="true" fork="yes">
             <classpath refid="AccountGenerator.classpath"/>
         </java>
     </target>
@@ -88,7 +84,7 @@
 		<jar jarfile="dist/pag-${DSTAMP}.jar" basedir="bin">
 			<zipgroupfileset dir="lib" includes="log4j-1.2.17.jar" />
 			<manifest>
-				<attribute name="Main-Class" value="layout.component.PGNLayLayout"/> 
+				<attribute name="Main-Class" value="layout.component.gui.PGNLayLayout"/> 
 			</manifest>
 			
 		</jar>
@@ -101,7 +97,7 @@
 	    <jar jarfile="dist/pagDeamon-${DSTAMP}.jar" basedir="bin">
 	    	<zipgroupfileset dir="lib" includes="log4j-1.2.17.jar" />
 			<manifest>
-				<attribute name="Main-Class" value="layout.component.PGenerator"/> 
+				<attribute name="Main-Class" value="layout.component.thread.PGenerator"/> 
 			</manifest>
 	    	<exclude name="**/PGNLayLayout*.class"/>
 	    </jar>
@@ -114,7 +110,7 @@
 		<jar jarfile="dist/pag-${DSTAMP}.jar" basedir="bin">
 			<zipgroupfileset dir="lib" includes="log4j-1.2.17.jar" />
 			<manifest>
-				<attribute name="Main-Class" value="layout.component.PGNLayLayout"/> 
+				<attribute name="Main-Class" value="layout.component.gui.PGNLayLayout"/> 
 			</manifest>
 			
 		</jar>

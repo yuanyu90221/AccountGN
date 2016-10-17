@@ -1,4 +1,4 @@
-package layout.component;
+package layout.component.gui;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -24,6 +24,9 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SpinnerNumberModel;
 
 import org.apache.log4j.Logger;
+
+import layout.component.fileio.FileUtil;
+import layout.component.thread.PGenerator;
 
 /**
  * @author YuanyuLiang

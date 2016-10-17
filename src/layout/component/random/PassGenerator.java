@@ -1,19 +1,23 @@
-package layout.component;
+package layout.component.random;
 
 import java.util.Random;
 
 /**
  * @author YuanyuLiang
- *
- * @description 產生帳號數字
+ * 
+ * @description: generator for password
  */
-public class AccountGenerator {
+public class PassGenerator {
 	private static final char[] symbols;
 
 	  static {
 	    StringBuilder tmp = new StringBuilder();
 	    for (char ch = '0'; ch <= '9'; ++ch)
 	      tmp.append(ch);
+	    for (char ch = 'a'; ch <= 'z'; ++ch)
+	      tmp.append(ch);
+	    for (char ch = 'A'; ch <= 'Z'; ++ch)
+		      tmp.append(ch);
 	    symbols = tmp.toString().toCharArray();
 	  }   
 
@@ -21,17 +25,17 @@ public class AccountGenerator {
 
 	  private final char[] buf;
 
-	  public AccountGenerator(int length) {
+	  public PassGenerator(int length) {
 	    if (length < 1)
 	      throw new IllegalArgumentException("length < 1: " + length);
 	    buf = new char[length];
 	  }
 
-	 /**
-	  * 產生下一個亂數string
-	  *  
-	  * @return
-	  */
+	/**
+	 * 產生下一個亂數string
+	 * 
+	 * @return
+	 */
 	public String nextString() {
 	    for (int idx = 0; idx < buf.length; ++idx) 
 	      buf[idx] = symbols[random.nextInt(symbols.length)];

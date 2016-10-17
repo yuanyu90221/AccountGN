@@ -1,4 +1,4 @@
-package layout.component;
+package layout.component.thread;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+
+import layout.component.fileio.FileUtil;
 
 /**
  * @author YuanyuLiang

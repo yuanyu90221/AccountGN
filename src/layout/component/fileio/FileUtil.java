@@ -1,4 +1,4 @@
-package layout.component;
+package layout.component.fileio;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import org.apache.log4j.Logger;
+
+import layout.component.model.KeyMaps;
+import layout.component.model.ResultModel;
+import layout.component.random.AccountGenerator;
+import layout.component.random.PassGenerator;
 /**
  * @author YuanyuLiang
  *
